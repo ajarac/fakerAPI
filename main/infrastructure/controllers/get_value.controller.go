@@ -12,9 +12,9 @@ type GetValueController struct {
 	useCase *in.GetValueUseCase
 }
 
-func (c *GetValueController) ByName(ctx *gin.Context) {
-	name := ctx.Param("name")
-	value, err := c.useCase.GetById(name)
+func (c *GetValueController) ById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	value, err := c.useCase.GetById(id)
 	var schemaNotFound *domain.SchemaNotFound
 	if errors.As(err, &schemaNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

@@ -11,11 +11,6 @@ type CreateSchemaController struct {
 	useCase *in.CreateSchemaUseCase
 }
 
-type SchemaDTO struct {
-	Name       string                   `json:"name"`
-	Properties []*domain.SchemaProperty `json:"properties" `
-}
-
 func (c *CreateSchemaController) Create(ctx *gin.Context) {
 	var schema SchemaDTO
 	err := ctx.BindJSON(&schema)
@@ -33,4 +28,9 @@ func (c *CreateSchemaController) Create(ctx *gin.Context) {
 
 func NewCreateSchemaController(useCase *in.CreateSchemaUseCase) *CreateSchemaController {
 	return &CreateSchemaController{useCase: useCase}
+}
+
+type SchemaDTO struct {
+	Name       string                   `json:"name"`
+	Properties []*domain.SchemaProperty `json:"properties" `
 }

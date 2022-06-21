@@ -12,6 +12,7 @@ type UseCases struct {
 	GetValue     *in.GetValueUseCase
 	GetListValue *in.GetListValueUseCase
 	GetSchemas   *in.GetSchemasUseCase
+	DeleteSchema *in.DeleteSchemaUseCase
 }
 
 func NewUseCases(env *config.Environment) *UseCases {
@@ -23,5 +24,6 @@ func NewUseCases(env *config.Environment) *UseCases {
 		GetValue:     in.NewGetValueUseCase(schemaStorage, valueProvider),
 		GetListValue: in.NewGetListValueUseCase(schemaStorage, valueProvider),
 		GetSchemas:   in.NewGetSchemasUseCase(schemaStorage),
+		DeleteSchema: in.NewDeleteSchemaUseCase(schemaStorage),
 	}
 }

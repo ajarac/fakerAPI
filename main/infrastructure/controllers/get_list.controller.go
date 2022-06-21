@@ -17,15 +17,15 @@ func NewGetListController(useCase *in.GetListValueUseCase) *GetListController {
 	return &GetListController{useCase: useCase}
 }
 
-func (c *GetListController) ByName(ctx *gin.Context) {
-	name := ctx.Param("name")
+func (c *GetListController) ById(ctx *gin.Context) {
+	id := ctx.Param("id")
 	limitString := ctx.DefaultQuery("limit", "25")
 	limit, err := strconv.Atoi(limitString)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	list, err := c.useCase.GetById(name, limit)
+	list, err := c.useCase.GetById(id, limit)
 	var schemaNotFound *domain.SchemaNotFound
 	if errors.As(err, &schemaNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

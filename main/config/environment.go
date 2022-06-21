@@ -1,22 +1,24 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
-	"log"
 	"os"
 )
 
 type Environment struct {
-	MongodbDomain string
+	MongodbDomain   string
+	MongodbPort     string
+	MongodbUsername string
+	MongodbPassword string
+	Port            string
 }
 
 func GetEnvironment() *Environment {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Panicln("Error loading environments")
-	}
 	return &Environment{
-		MongodbDomain: getEnvOrDefault("MONGODB_DOMAIN", "mongodb://root:password@localhost:27017"),
+		MongodbDomain:   getEnvOrDefault("MONGODB_DOMAIN", "localhost"),
+		MongodbPort:     getEnvOrDefault("MONGODB_PORT", "27017"),
+		MongodbUsername: getEnvOrDefault("MONGODB_USERNAME", "root"),
+		MongodbPassword: getEnvOrDefault("MONGODB_PASSWORD", "password"),
+		Port:            getEnvOrDefault("PORT", "3000"),
 	}
 }
 
