@@ -18,6 +18,9 @@ func (u *GetListValueUseCase) GetById(id string, limit int) ([]*domain.Value, er
 	if !ok {
 		return nil, domain.NewSchemaNotFoundByName(id)
 	}
+	if limit > 100 {
+		limit = 100
+	}
 	var list = make([]*domain.Value, limit)
 	for i := 0; i < limit; i++ {
 		list[i] = u.provider.Generate(schema)
