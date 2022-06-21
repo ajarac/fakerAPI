@@ -6,8 +6,8 @@ type SchemaNotFound struct {
 	msg string
 }
 
-func NewSchemaNotFoundByName(name string) *SchemaNotFound {
-	return &SchemaNotFound{msg: fmt.Sprintf("Schema with name: %s not found", name)}
+func NewSchemaNotFoundByName(id string) *SchemaNotFound {
+	return &SchemaNotFound{msg: fmt.Sprintf("Schema with id: %s not found", id)}
 }
 
 func (e *SchemaNotFound) Error() string {

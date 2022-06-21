@@ -9,7 +9,7 @@ type GetSchemasUseCase struct {
 	storage out.SchemaStorage
 }
 
-func (u *GetSchemasUseCase) Get() []*domain.Schema {
+func (u *GetSchemasUseCase) Get() ([]*domain.Schema, error) {
 	return u.storage.GetAll()
 }
 

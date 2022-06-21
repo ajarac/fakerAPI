@@ -10,10 +10,13 @@ type GetValueUseCase struct {
 	provider out.ValueProvider
 }
 
-func (u *GetValueUseCase) GetByName(name string) (*domain.Value, error) {
-	schema, err := u.storage.GetByName(name)
+func (u *GetValueUseCase) GetById(id string) (*domain.Value, error) {
+	schema, ok, err := u.storage.GetById(id)
 	if err != nil {
 		return nil, err
+	}
+	if !ok {
+		return nil, domain.NewSchemaNotFoundByName(id)
 	}
 	return u.provider.Generate(schema), nil
 }

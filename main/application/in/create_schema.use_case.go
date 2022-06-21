@@ -9,7 +9,8 @@ type CreateSchemaUseCase struct {
 	storage out.SchemaStorage
 }
 
-func (s *CreateSchemaUseCase) Create(schema *domain.Schema) error {
+func (s *CreateSchemaUseCase) Create(name string, properties []*domain.SchemaProperty) (*domain.Schema, error) {
+	schema := domain.NewSchema(s.storage.GetNextId(), name, properties)
 	return s.storage.Create(schema)
 }
 

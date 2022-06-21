@@ -3,11 +3,13 @@ package out
 import "fakerAPI/main/domain"
 
 type SchemaStorage interface {
-	Create(schema *domain.Schema) error
+	Create(schema *domain.Schema) (*domain.Schema, error)
 
-	GetByName(name string) (*domain.Schema, error)
+	GetNextId() string
 
-	GetAll() []*domain.Schema
+	GetById(id string) (*domain.Schema, bool, error)
 
-	Delete(name string) error
+	GetAll() ([]*domain.Schema, error)
+
+	Delete(id string) error
 }

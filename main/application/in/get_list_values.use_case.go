@@ -10,10 +10,13 @@ type GetListValueUseCase struct {
 	provider out.ValueProvider
 }
 
-func (u *GetListValueUseCase) GetByNameAndLimit(name string, limit int) ([]*domain.Value, error) {
-	schema, err := u.storage.GetByName(name)
+func (u *GetListValueUseCase) GetById(id string, limit int) ([]*domain.Value, error) {
+	schema, ok, err := u.storage.GetById(id)
 	if err != nil {
 		return nil, err
+	}
+	if !ok {
+		return nil, domain.NewSchemaNotFoundByName(id)
 	}
 	var list = make([]*domain.Value, limit)
 	for i := 0; i < limit; i++ {
