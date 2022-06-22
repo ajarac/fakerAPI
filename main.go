@@ -6,6 +6,7 @@ import (
 	"fakerAPI/main/infrastructure/controllers"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -18,6 +19,9 @@ func main() {
 	getListValuesController := controllers.NewGetListController(useCases.GetListValue)
 	getSchemasControllers := controllers.NewGetSchemasController(useCases.GetSchemas)
 	deleteSchemaController := controllers.NewDeleteSchemaController(useCases.DeleteSchema)
+	r.GET("/health", func(context *gin.Context) {
+		context.Status(http.StatusOK)
+	})
 	r.POST("/schemas", createSchemaController.Create)
 	r.GET("/schemas", getSchemasControllers.GetAll)
 	r.DELETE("/schemas/:id", deleteSchemaController.Delete)
