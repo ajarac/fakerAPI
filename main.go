@@ -21,6 +21,7 @@ func main() {
 	deleteSchemaController := controllers.NewDeleteSchemaController(useCases.DeleteSchema)
 	r.Use(func(context *gin.Context) {
 		rapidAPISecret := context.GetHeader("X-RapidAPI-Proxy-Secret")
+		log.Printf("RAPID SECRET:: %s", rapidAPISecret)
 		if rapidAPISecret != env.RapidAPIKey {
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
