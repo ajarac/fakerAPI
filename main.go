@@ -19,6 +19,13 @@ func main() {
 	getListValuesController := controllers.NewGetListController(useCases.GetListValue)
 	getSchemasControllers := controllers.NewGetSchemasController(useCases.GetSchemas)
 	deleteSchemaController := controllers.NewDeleteSchemaController(useCases.DeleteSchema)
+	r.Use(func(context *gin.Context) {
+		rapidAPISecret := context.GetHeader("X-RapidAPI-Proxy-Secret")
+		if rapidAPISecret != env.RapidAPIKey {
+			context.AbortWithStatus(http.StatusUnauthorized)
+		}
+
+	})
 	r.GET("/health", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})

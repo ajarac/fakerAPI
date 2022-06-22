@@ -9,6 +9,7 @@ type Environment struct {
 	MongodbPort     string
 	MongodbUsername string
 	MongodbPassword string
+	RapidAPIKey     string
 	Port            string
 }
 
@@ -18,6 +19,7 @@ func GetEnvironment() *Environment {
 		MongodbPort:     getEnvOrDefault("MONGODB_PORT", "27017"),
 		MongodbUsername: getEnvOrDefault("MONGODB_USERNAME", "root"),
 		MongodbPassword: getEnvOrDefault("MONGODB_PASSWORD", "password"),
+		RapidAPIKey:     getEnvOrDefault("RAPID_API_KEY", ""),
 		Port:            getEnvOrDefault("PORT", "3000"),
 	}
 }
