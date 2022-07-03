@@ -19,7 +19,7 @@ func GetEnvironment() *Environment {
 		MongodbPort:     getEnvOrDefault("MONGODB_PORT", "27017"),
 		MongodbUsername: getEnvOrDefault("MONGODB_USERNAME", "root"),
 		MongodbPassword: getEnvOrDefault("MONGODB_PASSWORD", "password"),
-		RapidAPIKey:     getEnvOrDefault("RAPID_API_KEY", ""),
+		RapidAPIKey:     getEnvOrDefault("RAPID_API_KEY", "local"),
 		Port:            getEnvOrDefault("PORT", "3000"),
 	}
 }
