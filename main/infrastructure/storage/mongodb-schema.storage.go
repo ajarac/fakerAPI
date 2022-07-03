@@ -85,5 +85,11 @@ func getUserByContext(context context.Context) string {
 }
 
 func NewMongoDBSchemaStorage(database *mongo.Database) *MongoDBSchemaStorage {
-	return &MongoDBSchemaStorage{client: database.Collection("schemas")}
+	mod := mongo.IndexModel{
+		Keys:    bson.M{"user": 1},
+		Options: nil,
+	}
+	collection := database.Collection("schemas")
+	collection.Indexes().CreateOne(context.Background(), mod)
+	return &MongoDBSchemaStorage{client: collection}
 }
