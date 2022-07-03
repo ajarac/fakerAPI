@@ -8,6 +8,7 @@ import (
 type MongoSchema struct {
 	Id         primitive.ObjectID     `bson:"_id"`
 	Name       string                 `bson:"name"`
+	User       string                 `bson:"user"`
 	Properties []*MongoSchemaProperty `bson:"properties"`
 }
 type MongoSchemaProperty struct {

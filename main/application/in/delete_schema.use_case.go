@@ -1,13 +1,16 @@
 package in
 
-import "fakerAPI/main/application/out"
+import (
+	"context"
+	"fakerAPI/main/application/out"
+)
 
 type DeleteSchemaUseCase struct {
 	storage out.SchemaStorage
 }
 
-func (u *DeleteSchemaUseCase) Delete(id string) error {
-	return u.storage.Delete(id)
+func (u *DeleteSchemaUseCase) Delete(ctx context.Context, id string) error {
+	return u.storage.Delete(ctx, id)
 }
 
 func NewDeleteSchemaUseCase(storage out.SchemaStorage) *DeleteSchemaUseCase {

@@ -1,15 +1,18 @@
 package out
 
-import "fakerAPI/main/domain"
+import (
+	"context"
+	"fakerAPI/main/domain"
+)
 
 type SchemaStorage interface {
-	Create(schema *domain.Schema) (*domain.Schema, error)
+	Create(context context.Context, schema *domain.Schema) (*domain.Schema, error)
 
 	GetNextId() string
 
-	GetById(id string) (*domain.Schema, bool, error)
+	GetById(context context.Context, id string) (*domain.Schema, bool, error)
 
-	GetAll() ([]*domain.Schema, error)
+	GetAll(context context.Context) ([]*domain.Schema, error)
 
-	Delete(id string) error
+	Delete(context context.Context, id string) error
 }

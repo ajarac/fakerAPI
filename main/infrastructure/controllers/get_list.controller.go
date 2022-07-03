@@ -25,7 +25,7 @@ func (c *GetListController) ById(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	list, err := c.useCase.GetById(id, limit)
+	list, err := c.useCase.GetById(ctx, id, limit)
 	var schemaNotFound *domain.SchemaNotFound
 	if errors.As(err, &schemaNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

@@ -39,13 +39,14 @@ func toDomainProperty(mongoProperty *MongoSchemaProperty) *domain.SchemaProperty
 	}
 }
 
-func fromDomain(schema *domain.Schema) (*MongoSchema, error) {
+func fromDomain(schema *domain.Schema, user string) (*MongoSchema, error) {
 	id, err := primitive.ObjectIDFromHex(schema.Id)
 	if err != nil {
 		return nil, err
 	}
 	return &MongoSchema{
 		Id:         id,
+		User:       user,
 		Name:       schema.Name,
 		Properties: fromDomainProperties(schema.Properties),
 	}, nil

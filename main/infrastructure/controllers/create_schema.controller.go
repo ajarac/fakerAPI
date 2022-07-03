@@ -18,7 +18,7 @@ func (c *CreateSchemaController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	schemaCreated, err := c.useCase.Create(schema.Name, schema.Properties)
+	schemaCreated, err := c.useCase.Create(ctx, schema.Name, schema.Properties)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

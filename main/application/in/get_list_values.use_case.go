@@ -1,6 +1,7 @@
 package in
 
 import (
+	"context"
 	"fakerAPI/main/application/out"
 	"fakerAPI/main/domain"
 )
@@ -10,8 +11,8 @@ type GetListValueUseCase struct {
 	provider out.ValueProvider
 }
 
-func (u *GetListValueUseCase) GetById(id string, limit int) ([]*domain.Value, error) {
-	schema, ok, err := u.storage.GetById(id)
+func (u *GetListValueUseCase) GetById(ctx context.Context, id string, limit int) ([]*domain.Value, error) {
+	schema, ok, err := u.storage.GetById(ctx, id)
 	if err != nil {
 		return nil, err
 	}

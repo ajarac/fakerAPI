@@ -16,7 +16,7 @@ func NewDeleteSchemaController(useCase *in.DeleteSchemaUseCase) *DeleteSchemaCon
 
 func (c *DeleteSchemaController) Delete(ctx *gin.Context) {
 	id := ctx.Param("id")
-	err := c.useCase.Delete(id)
+	err := c.useCase.Delete(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
