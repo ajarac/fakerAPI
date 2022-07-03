@@ -4,6 +4,7 @@ import (
 	"fakerAPI/main/config"
 	"fakerAPI/main/infrastructure"
 	"fakerAPI/main/infrastructure/controllers"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -19,15 +20,23 @@ func main() {
 	getListValuesController := controllers.NewGetListController(useCases.GetListValue)
 	getSchemasControllers := controllers.NewGetSchemasController(useCases.GetSchemas)
 	deleteSchemaController := controllers.NewDeleteSchemaController(useCases.DeleteSchema)
+
 	r.Use(func(context *gin.Context) {
 		rapidAPISecret := context.GetHeader("X-RapidAPI-Proxy-Secret")
-
-		log.Printf("Headers:: %v", context.Request.Header)
 		if rapidAPISecret != env.RapidAPIKey {
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
 	})
+	r.Use(func(context *gin.Context) {
+		user := context.GetHeader("X-Rapidapi-User")
+		context.Set("user", user)
+	})
 	r.GET("/health", func(context *gin.Context) {
+		user, _ := context.Get("user")
+		if user == "" {
+			user = " World"
+		}
+		context.String(http.StatusOK, fmt.Sprintf("Hello %s!", user))
 		context.Status(http.StatusOK)
 	})
 	r.POST("/schemas", createSchemaController.Create)
