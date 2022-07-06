@@ -13,8 +13,8 @@ func toDomain(mongoSchema *MongoSchema) *domain.Schema {
 	}
 }
 
-func toDomainProperties(mongoProperties []*MongoSchemaProperty) []*domain.SchemaProperty {
-	var properties []*domain.SchemaProperty
+func toDomainProperties(mongoProperties []*MongoSchemaProperty) []*domain.AbstractProperty {
+	var properties []*domain.AbstractProperty
 	if mongoProperties != nil && len(mongoProperties) > 0 {
 		for _, schemaProperty := range mongoProperties {
 			properties = append(properties, toDomainProperty(schemaProperty))
@@ -23,7 +23,7 @@ func toDomainProperties(mongoProperties []*MongoSchemaProperty) []*domain.Schema
 	return properties
 }
 
-func toDomainProperty(mongoProperty *MongoSchemaProperty) *domain.SchemaProperty {
+func toDomainProperty(mongoProperty *MongoSchemaProperty) *domain.AbstractProperty {
 	if mongoProperty == nil {
 		return nil
 	}

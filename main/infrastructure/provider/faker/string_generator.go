@@ -5,6 +5,6 @@ import (
 	"github.com/bxcodec/faker/v3"
 )
 
-func stringGenerator(property *domain.SchemaProperty) any {
+func stringGenerator(property *domain.PropertyString) any {
 	return faker.Word()
 }

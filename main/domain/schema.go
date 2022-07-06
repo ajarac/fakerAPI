@@ -1,11 +1,11 @@
 package domain
 
 type Schema struct {
-	Id         string            `json:"id" bson:"_id"`
-	Name       string            `json:"name" bson:"name"`
-	Properties []*SchemaProperty `json:"properties" bson:"properties"`
+	Id         string              `json:"id"`
+	Name       string              `json:"name"`
+	Properties []*AbstractProperty `json:"properties"`
 }
 
-func NewSchema(id string, name string, properties []*SchemaProperty) *Schema {
+func NewSchema(id string, name string, properties []*AbstractProperty) *Schema {
 	return &Schema{Id: id, Name: name, Properties: properties}
 }

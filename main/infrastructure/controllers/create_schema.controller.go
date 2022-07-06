@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fakerAPI/main/application/in"
-	"fakerAPI/main/domain"
+	"fakerAPI/main/infrastructure/controllers/mapper"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -31,6 +31,6 @@ func NewCreateSchemaController(useCase *in.CreateSchemaUseCase) *CreateSchemaCon
 }
 
 type SchemaDTO struct {
-	Name       string                   `json:"name"`
-	Properties []*domain.SchemaProperty `json:"properties" `
+	Name       string                 `json:"name"`
+	Properties []*mapper.JsonProperty `json:"properties" `
 }

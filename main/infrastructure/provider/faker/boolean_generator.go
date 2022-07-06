@@ -5,6 +5,6 @@ import (
 	"math/rand"
 )
 
-func boolGenerator(property *domain.SchemaProperty) any {
-	return rand.Intn(2) == 1
+func boolGenerator(property *domain.BooleanProperty) any {
+	return rand.Float32() < property.Rate
 }
