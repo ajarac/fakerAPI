@@ -1,10 +1,10 @@
 package faker
 
 import (
-	"fakerAPI/main/domain"
+	"fakerAPI/main/domain/properties"
 	"math/rand"
 )
 
-func boolGenerator(property *domain.SchemaProperty) any {
-	return rand.Intn(2) == 1
+func boolGenerator(property *properties.BooleanProperty) any {
+	return rand.Float32() < property.Rate
 }
