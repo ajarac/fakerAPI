@@ -13,7 +13,7 @@ type GetSchemasController struct {
 func (c *GetSchemasController) GetAll(ctx *gin.Context) {
 	schemas, err := c.useCase.Get(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, schemas)

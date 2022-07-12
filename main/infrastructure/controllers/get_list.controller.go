@@ -22,7 +22,7 @@ func (c *GetListController) ById(ctx *gin.Context) {
 	limitString := ctx.DefaultQuery("limit", "25")
 	limit, err := strconv.Atoi(limitString)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	list, err := c.useCase.GetById(ctx, id, limit)
