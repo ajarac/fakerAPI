@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 )
 
 type MongoDBSchemaStorage struct {
@@ -100,11 +101,21 @@ func getUserByContext(context context.Context) string {
 }
 
 func NewMongoDBSchemaStorage(database *mongo.Database) *MongoDBSchemaStorage {
-	mod := mongo.IndexModel{
-		Keys:    bson.M{"user_id": 1},
-		Options: nil,
-	}
 	collection := database.Collection("schemas")
-	collection.Indexes().CreateOne(context.Background(), mod)
+	createIndexes(collection)
 	return &MongoDBSchemaStorage{client: collection}
+}
+
+func createIndexes(collection *mongo.Collection) {
+	models := []mongo.IndexModel{{
+		Keys: bson.M{"user_id": 1},
+	}, {
+		Keys: bson.M{"name": 1},
+	}, {
+		Keys: bson.D{{Key: "user_id", Value: 1}, {Key: "name", Value: 1}},
+	}}
+	_, err := collection.Indexes().CreateMany(context.Background(), models)
+	if err != nil {
+		log.Panicf("Error creating indexes %s\n", err.Error())
+	}
 }
