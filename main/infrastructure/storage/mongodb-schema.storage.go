@@ -2,12 +2,14 @@ package storage
 
 import (
 	"context"
+	"fakerAPI/main/application/dto"
 	"fakerAPI/main/config"
 	"fakerAPI/main/domain"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 )
 
@@ -44,23 +46,21 @@ func (m *MongoDBSchemaStorage) GetById(context context.Context, id string) (*dom
 	return m.getOneSchemaByFilter(context, filter)
 }
 
-func (m *MongoDBSchemaStorage) GetAll(context context.Context) ([]*domain.Schema, error) {
+func (m *MongoDBSchemaStorage) GetAll(context context.Context) ([]*dto.BasicSchemaDTO, error) {
 	user := getUserByContext(context)
-	cursor, err := m.client.Find(context, bson.D{{"user_id", user}})
+	opt := options.Find().SetProjection(bson.D{{"_id", 1}, {"name", 1}})
+	cursor, err := m.client.Find(context, bson.D{{"user_id", user}}, opt)
 	if err != nil {
 		return nil, err
 	}
-	var schemas []*domain.Schema
+	var schemas []*dto.BasicSchemaDTO
 	for cursor.Next(context) {
 		var mongoSchema MongoSchema
 		err = cursor.Decode(&mongoSchema)
 		if err != nil {
 			return nil, err
 		}
-		schema, err := toDomain(&mongoSchema)
-		if err != nil {
-			return nil, err
-		}
+		schema := dto.NewBasicSchemaDTO(mongoSchema.Id.Hex(), mongoSchema.Name)
 		schemas = append(schemas, schema)
 	}
 	return schemas, nil

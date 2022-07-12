@@ -2,6 +2,7 @@ package out
 
 import (
 	"context"
+	"fakerAPI/main/application/dto"
 	"fakerAPI/main/domain"
 )
 
@@ -14,7 +15,7 @@ type SchemaStorage interface {
 
 	GetByName(context context.Context, name string) (*domain.Schema, bool, error)
 
-	GetAll(context context.Context) ([]*domain.Schema, error)
+	GetAll(context context.Context) ([]*dto.BasicSchemaDTO, error)
 
 	Delete(context context.Context, id string) error
 }
