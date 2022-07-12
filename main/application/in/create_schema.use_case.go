@@ -12,7 +12,18 @@ type CreateSchemaUseCase struct {
 }
 
 func (s *CreateSchemaUseCase) Create(context context.Context, name string, properties []properties.Property) (*domain.Schema, error) {
-	schema := domain.NewSchema(s.storage.GetNextId(), name, properties)
+	_, exists, err := s.storage.GetByName(context, name)
+	if err != nil {
+		return nil, err
+	}
+	if exists {
+		return nil, domain.NewSchemaAlreadyExistsByName(name)
+	}
+
+	schema, err := domain.NewSchema(s.storage.GetNextId(), name, properties)
+	if err != nil {
+		return nil, err
+	}
 	return s.storage.Create(context, schema)
 }
 

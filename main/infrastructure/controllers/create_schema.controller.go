@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"errors"
 	"fakerAPI/main/application/in"
+	"fakerAPI/main/domain"
 	"fakerAPI/main/infrastructure/controllers/mapper"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -18,7 +20,19 @@ func (c *CreateSchemaController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	schemaCreated, err := c.useCase.Create(ctx, schema.Name, mapper.BuildProperties(schema.Properties))
+	props, err := mapper.BuildProperties(schema.Properties)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	schemaCreated, err := c.useCase.Create(ctx, schema.Name, props)
+	var schemaNotValid *domain.SchemaNotValid
+	var schemaAlreadyExists *domain.SchemaAlreadyExists
+	if errors.As(err, &schemaNotValid) || errors.As(err, &schemaAlreadyExists) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

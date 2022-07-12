@@ -6,25 +6,34 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func toDomain(mongoSchema *MongoSchema) *domain.Schema {
-	return &domain.Schema{
-		Id:         mongoSchema.Id.Hex(),
-		Name:       mongoSchema.Name,
-		Properties: toDomainProperties(mongoSchema.Properties),
+func toDomain(mongoSchema *MongoSchema) (*domain.Schema, error) {
+	props, err := toDomainProperties(mongoSchema.Properties)
+	if err != nil {
+		return nil, err
 	}
+
+	schema, err := domain.NewSchema(mongoSchema.Id.Hex(), mongoSchema.Name, props)
+	if err != nil {
+		return nil, err
+	}
+	return schema, nil
 }
 
-func toDomainProperties(mongoProperties []MongoSchemaProperty) []properties.Property {
+func toDomainProperties(mongoProperties []MongoSchemaProperty) ([]properties.Property, error) {
 	p := make([]properties.Property, len(mongoProperties))
 	if mongoProperties != nil && len(mongoProperties) > 0 {
 		for i, schemaProperty := range mongoProperties {
-			p[i] = toDomainProperty(schemaProperty)
+			prop, err := toDomainProperty(schemaProperty)
+			if err != nil {
+				return nil, err
+			}
+			p[i] = prop
 		}
 	}
-	return p
+	return p, nil
 }
 
-func toDomainProperty(mongoProperty MongoSchemaProperty) properties.Property {
+func toDomainProperty(mongoProperty MongoSchemaProperty) (properties.Property, error) {
 	switch mongoProperty.Type {
 	case properties.String:
 		return properties.NewStringProperty(mongoProperty.Name)
@@ -37,25 +46,31 @@ func toDomainProperty(mongoProperty MongoSchemaProperty) properties.Property {
 	case properties.Object:
 		p := make([]properties.Property, len(mongoProperty.Properties))
 		for i, objectProperty := range mongoProperty.Properties {
-			domainProperty := toDomainProperty(objectProperty)
+			domainProperty, err := toDomainProperty(objectProperty)
+			if err != nil {
+				return nil, err
+			}
 			p[i] = domainProperty
 		}
 		return properties.NewObjectProperty(mongoProperty.Name, p)
 	case properties.Array:
-		element := toDomainProperty(*mongoProperty.Element)
+		element, err := toDomainProperty(*mongoProperty.Element)
+		if err != nil {
+			return nil, err
+		}
 		return properties.NewArrayProperty(mongoProperty.Name, mongoProperty.RangeSize, element)
 	}
-	return nil
+	return nil, nil
 }
 
-func fromDomain(schema *domain.Schema) (*MongoSchema, error) {
+func fromDomain(schema *domain.Schema, userId string) (*MongoSchema, error) {
 	id, err := primitive.ObjectIDFromHex(schema.Id)
 	if err != nil {
 		return nil, err
 	}
 	return &MongoSchema{
 		Id:         id,
-		UserId:     schema.UserId,
+		UserId:     userId,
 		Name:       schema.Name,
 		Properties: fromDomainProperties(schema.Properties),
 	}, nil

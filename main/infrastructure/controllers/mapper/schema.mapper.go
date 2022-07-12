@@ -2,16 +2,19 @@ package mapper
 
 import "fakerAPI/main/domain/properties"
 
-func BuildProperties(jsonProperties []JsonProperty) []properties.Property {
+func BuildProperties(jsonProperties []JsonProperty) ([]properties.Property, error) {
 	p := make([]properties.Property, len(jsonProperties))
 	for i, property := range jsonProperties {
-		prop := buildProperty(property)
+		prop, err := buildProperty(property)
+		if err != nil {
+			return nil, err
+		}
 		p[i] = prop
 	}
-	return p
+	return p, nil
 }
 
-func buildProperty(p JsonProperty) properties.Property {
+func buildProperty(p JsonProperty) (properties.Property, error) {
 	switch p.Type {
 	case properties.String:
 		return properties.NewStringProperty(p.Name)
@@ -22,10 +25,17 @@ func buildProperty(p JsonProperty) properties.Property {
 	case properties.Date:
 		return properties.NewDateProperty(p.Name, p.From, p.To)
 	case properties.Object:
-		buildProperties := BuildProperties(p.Properties)
+		buildProperties, err := BuildProperties(p.Properties)
+		if err != nil {
+			return nil, err
+		}
 		return properties.NewObjectProperty(p.Name, buildProperties)
 	case properties.Array:
-		return properties.NewArrayProperty(p.Name, p.RangeSize, buildProperty(*p.Element))
+		element, err := buildProperty(*p.Element)
+		if err != nil {
+			return nil, err
+		}
+		return properties.NewArrayProperty(p.Name, p.RangeSize, element)
 	}
-	return nil
+	return nil, nil
 }

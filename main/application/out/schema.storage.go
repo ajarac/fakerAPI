@@ -12,6 +12,8 @@ type SchemaStorage interface {
 
 	GetById(context context.Context, id string) (*domain.Schema, bool, error)
 
+	GetByName(context context.Context, name string) (*domain.Schema, bool, error)
+
 	GetAll(context context.Context) ([]*domain.Schema, error)
 
 	Delete(context context.Context, id string) error
