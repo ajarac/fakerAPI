@@ -28,7 +28,7 @@ func main() {
 		}
 	})
 	r.GET("/health", func(context *gin.Context) {
-		user, _ := context.Get("user")
+		user := context.Value(config.UserContext)
 		if user == "" {
 			user = " World"
 		}

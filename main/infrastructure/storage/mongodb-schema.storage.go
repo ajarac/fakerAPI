@@ -19,11 +19,7 @@ func (m *MongoDBSchemaStorage) GetNextId() string {
 }
 
 func (m *MongoDBSchemaStorage) Create(context context.Context, schema *domain.Schema) (*domain.Schema, error) {
-	user := getUserByContext(context)
-	mongoSchema, err := fromDomain(schema, user)
-	if err != nil {
-		return nil, err
-	}
+	mongoSchema, err := fromDomain(schema)
 	_, err = m.client.InsertOne(context, mongoSchema)
 	if err != nil {
 		return nil, err
@@ -38,7 +34,7 @@ func (m *MongoDBSchemaStorage) GetById(context context.Context, id string) (*dom
 		return nil, false, err
 	}
 	var mongoSchema MongoSchema
-	cursor := m.client.FindOne(context, bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user", user}}}}})
+	cursor := m.client.FindOne(context, bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user_id", user}}}}})
 	err = cursor.Decode(&mongoSchema)
 	if err == mongo.ErrNoDocuments {
 		return nil, false, nil
@@ -51,7 +47,7 @@ func (m *MongoDBSchemaStorage) GetById(context context.Context, id string) (*dom
 
 func (m *MongoDBSchemaStorage) GetAll(context context.Context) ([]*domain.Schema, error) {
 	user := getUserByContext(context)
-	cursor, err := m.client.Find(context, bson.D{{"user", user}})
+	cursor, err := m.client.Find(context, bson.D{{"user_id", user}})
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +69,7 @@ func (m *MongoDBSchemaStorage) Delete(context context.Context, id string) error 
 	if err != nil {
 		return err
 	}
-	_, err = m.client.DeleteOne(context, bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user", user}}}}})
+	_, err = m.client.DeleteOne(context, bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user_id", user}}}}})
 	if err != nil {
 		return err
 	}
@@ -86,7 +82,7 @@ func getUserByContext(context context.Context) string {
 
 func NewMongoDBSchemaStorage(database *mongo.Database) *MongoDBSchemaStorage {
 	mod := mongo.IndexModel{
-		Keys:    bson.M{"user": 1},
+		Keys:    bson.M{"user_id": 1},
 		Options: nil,
 	}
 	collection := database.Collection("schemas")

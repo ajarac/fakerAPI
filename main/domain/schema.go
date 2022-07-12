@@ -1,11 +1,13 @@
 package domain
 
+import "fakerAPI/main/domain/properties"
+
 type Schema struct {
-	Id         string              `json:"id"`
-	Name       string              `json:"name"`
-	Properties []*AbstractProperty `json:"properties"`
+	Id         string
+	Name       string
+	Properties []properties.Property
 }
 
-func NewSchema(id string, name string, properties []*AbstractProperty) *Schema {
+func NewSchema(id string, name string, properties []properties.Property) *Schema {
 	return &Schema{Id: id, Name: name, Properties: properties}
 }

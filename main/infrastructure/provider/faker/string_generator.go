@@ -1,10 +1,10 @@
 package faker
 
 import (
-	"fakerAPI/main/domain"
+	"fakerAPI/main/domain/properties"
 	"github.com/bxcodec/faker/v3"
 )
 
-func stringGenerator(property *domain.PropertyString) any {
+func stringGenerator(property *properties.StringProperty) any {
 	return faker.Word()
 }

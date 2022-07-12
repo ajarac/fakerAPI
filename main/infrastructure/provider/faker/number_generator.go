@@ -1,10 +1,10 @@
 package faker
 
 import (
-	"fakerAPI/main/domain"
+	"fakerAPI/main/domain/properties"
 	"math/rand"
 )
 
-func numberGenerator(property *domain.SchemaProperty) any {
+func numberGenerator(property *properties.NumberProperty) any {
 	return rand.Intn(100)
 }

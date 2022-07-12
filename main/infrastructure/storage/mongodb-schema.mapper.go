@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fakerAPI/main/domain"
+	"fakerAPI/main/domain/properties"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -13,67 +14,92 @@ func toDomain(mongoSchema *MongoSchema) *domain.Schema {
 	}
 }
 
-func toDomainProperties(mongoProperties []*MongoSchemaProperty) []*domain.AbstractProperty {
-	var properties []*domain.AbstractProperty
+func toDomainProperties(mongoProperties []MongoSchemaProperty) []properties.Property {
+	p := make([]properties.Property, len(mongoProperties))
 	if mongoProperties != nil && len(mongoProperties) > 0 {
-		for _, schemaProperty := range mongoProperties {
-			properties = append(properties, toDomainProperty(schemaProperty))
+		for i, schemaProperty := range mongoProperties {
+			p[i] = toDomainProperty(schemaProperty)
 		}
 	}
-	return properties
+	return p
 }
 
-func toDomainProperty(mongoProperty *MongoSchemaProperty) *domain.AbstractProperty {
-	if mongoProperty == nil {
-		return nil
+func toDomainProperty(mongoProperty MongoSchemaProperty) properties.Property {
+	switch mongoProperty.Type {
+	case properties.String:
+		return properties.NewStringProperty(mongoProperty.Name)
+	case properties.Number:
+		return properties.NewNumberProperty(mongoProperty.Name, mongoProperty.Min, mongoProperty.Max)
+	case properties.Boolean:
+		return properties.NewBooleanProperty(mongoProperty.Name, mongoProperty.Rate)
+	case properties.Date:
+		return properties.NewDateProperty(mongoProperty.Name, mongoProperty.From, mongoProperty.To)
+	case properties.Object:
+		p := make([]properties.Property, len(mongoProperty.Properties))
+		for i, objectProperty := range mongoProperty.Properties {
+			domainProperty := toDomainProperty(objectProperty)
+			p[i] = domainProperty
+		}
+		return properties.NewObjectProperty(mongoProperty.Name, p)
+	case properties.Array:
+		element := toDomainProperty(*mongoProperty.Element)
+		return properties.NewArrayProperty(mongoProperty.Name, mongoProperty.RangeSize, element)
 	}
-	return &domain.SchemaProperty{
-		Name:       mongoProperty.Name,
-		Type:       mongoProperty.Type,
-		Min:        mongoProperty.Min,
-		Max:        mongoProperty.Max,
-		Rate:       mongoProperty.Rate,
-		Element:    toDomainProperty(mongoProperty.Element),
-		RangeSize:  mongoProperty.RangeSize,
-		Properties: toDomainProperties(mongoProperty.Properties),
-	}
+	return nil
 }
 
-func fromDomain(schema *domain.Schema, user string) (*MongoSchema, error) {
+func fromDomain(schema *domain.Schema) (*MongoSchema, error) {
 	id, err := primitive.ObjectIDFromHex(schema.Id)
 	if err != nil {
 		return nil, err
 	}
 	return &MongoSchema{
 		Id:         id,
-		User:       user,
+		UserId:     schema.UserId,
 		Name:       schema.Name,
 		Properties: fromDomainProperties(schema.Properties),
 	}, nil
 }
 
-func fromDomainProperties(properties []*domain.SchemaProperty) []*MongoSchemaProperty {
-	var mongoProperties []*MongoSchemaProperty
+func fromDomainProperties(properties []properties.Property) []MongoSchemaProperty {
+	mongoProperties := make([]MongoSchemaProperty, len(properties))
 	if properties != nil && len(properties) > 0 {
-		for _, schemaProperty := range properties {
-			mongoProperties = append(mongoProperties, fromDomainProperty(schemaProperty))
+		for i, schemaProperty := range properties {
+			mongoProperties[i] = fromDomainProperty(schemaProperty)
 		}
 	}
 	return mongoProperties
 }
 
-func fromDomainProperty(property *domain.SchemaProperty) *MongoSchemaProperty {
-	if property == nil {
-		return nil
+func fromDomainProperty(property properties.Property) MongoSchemaProperty {
+	mongoProperty := MongoSchemaProperty{
+		Type: property.GetType(),
+		Name: property.GetName(),
 	}
-	return &MongoSchemaProperty{
-		Name:       property.Name,
-		Type:       property.Type,
-		Min:        property.Min,
-		Max:        property.Max,
-		Rate:       property.Rate,
-		Element:    fromDomainProperty(property.Element),
-		RangeSize:  property.RangeSize,
-		Properties: fromDomainProperties(property.Properties),
+	switch property.GetType() {
+	case properties.Number:
+		mongoProperty.Min = property.(*properties.NumberProperty).Min
+		mongoProperty.Max = property.(*properties.NumberProperty).Max
+		break
+	case properties.Boolean:
+		mongoProperty.Rate = property.(*properties.BooleanProperty).Rate
+		break
+	case properties.Date:
+		mongoProperty.From = property.(*properties.DateProperty).From
+		mongoProperty.To = property.(*properties.DateProperty).To
+		break
+	case properties.Object:
+		mongoProperties := make([]MongoSchemaProperty, len(property.(*properties.ObjectProperty).Properties))
+		for i, objectProperty := range property.(*properties.ObjectProperty).Properties {
+			mongoProperties[i] = fromDomainProperty(objectProperty)
+		}
+		mongoProperty.Properties = mongoProperties
+		break
+	case properties.Array:
+		element := fromDomainProperty(property.(*properties.ArrayProperty).Element)
+		mongoProperty.Element = &element
+		mongoProperty.RangeSize = property.(*properties.ArrayProperty).RangeSize
+		break
 	}
+	return mongoProperty
 }
