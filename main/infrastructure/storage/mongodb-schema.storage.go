@@ -53,7 +53,7 @@ func (m *MongoDBSchemaStorage) GetAll(context context.Context) ([]*dto.BasicSche
 	if err != nil {
 		return nil, err
 	}
-	var schemas []*dto.BasicSchemaDTO
+	schemas := []*dto.BasicSchemaDTO{}
 	for cursor.Next(context) {
 		var mongoSchema MongoSchema
 		err = cursor.Decode(&mongoSchema)
