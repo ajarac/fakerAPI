@@ -1,6 +1,9 @@
 package mapper
 
-import "fakerAPI/main/domain/properties"
+import (
+	"fakerAPI/main/domain/properties"
+	"fmt"
+)
 
 func BuildProperties(jsonProperties []JsonProperty) ([]properties.Property, error) {
 	p := make([]properties.Property, len(jsonProperties))
@@ -36,6 +39,7 @@ func buildProperty(p JsonProperty) (properties.Property, error) {
 			return nil, err
 		}
 		return properties.NewArrayProperty(p.Name, p.RangeSize, element)
+	default:
+		return nil, properties.NewPropertyNotValid(p.Name, fmt.Sprintf("property %s is not valid", p.Type))
 	}
-	return nil, nil
 }
