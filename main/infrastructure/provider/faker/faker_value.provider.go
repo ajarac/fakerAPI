@@ -31,6 +31,8 @@ func (provider *ValueProvider) generateProperty(property properties.Property) an
 		return provider.objectGenerator(property.(*properties.ObjectProperty))
 	case properties.Array:
 		return provider.arrayGenerator(property.(*properties.ArrayProperty))
+	case properties.Enum:
+		return enumGenerator(property.(*properties.EnumProperty))
 	}
 	return nil
 }

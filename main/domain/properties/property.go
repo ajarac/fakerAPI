@@ -9,6 +9,7 @@ const (
 	Date         = "date"
 	Object       = "object"
 	Array        = "array"
+	Enum         = "enum"
 )
 
 type Property interface {

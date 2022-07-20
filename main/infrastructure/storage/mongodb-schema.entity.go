@@ -23,4 +23,5 @@ type MongoSchemaProperty struct {
 	Element    *MongoSchemaProperty  `bson:"element,omitempty"`
 	RangeSize  [2]int                `bson:"rangeSize,omitempty"`
 	Properties []MongoSchemaProperty `bson:"properties,omitempty"`
+	Enums      []string              `bson:"enums,omitempty"`
 }

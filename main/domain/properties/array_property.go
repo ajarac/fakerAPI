@@ -1,9 +1,9 @@
 package properties
 
 type ArrayProperty struct {
-	AbstractProperty `bson:"metadata"`
-	RangeSize        [2]int   `bson:"rangeSize"`
-	Element          Property `bson:"element"`
+	AbstractProperty
+	RangeSize [2]int
+	Element   Property
 }
 
 func NewArrayProperty(name string, rangeSize [2]int, element Property) (*ArrayProperty, error) {

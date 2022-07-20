@@ -1,7 +1,7 @@
 package properties
 
 type StringProperty struct {
-	AbstractProperty `bson:"metadata"`
+	AbstractProperty
 }
 
 func NewStringProperty(name string) (*StringProperty, error) {

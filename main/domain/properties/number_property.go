@@ -1,9 +1,9 @@
 package properties
 
 type NumberProperty struct {
-	AbstractProperty `bson:"metadata"`
-	Min              int `bson:"min"`
-	Max              int `bson:"max"`
+	AbstractProperty
+	Min int
+	Max int
 }
 
 func NewNumberProperty(name string, min int, max int) (*NumberProperty, error) {

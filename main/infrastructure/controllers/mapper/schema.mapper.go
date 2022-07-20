@@ -39,6 +39,8 @@ func buildProperty(p JsonProperty) (properties.Property, error) {
 			return nil, err
 		}
 		return properties.NewArrayProperty(p.Name, p.RangeSize, element)
+	case properties.Enum:
+		return properties.NewEnumProperty(p.Name, p.Enums)
 	default:
 		return nil, properties.NewPropertyNotValid(p.Name, fmt.Sprintf("property %s is not valid", p.Type))
 	}

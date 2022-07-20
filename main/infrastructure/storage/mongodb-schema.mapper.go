@@ -59,6 +59,8 @@ func toDomainProperty(mongoProperty MongoSchemaProperty) (properties.Property, e
 			return nil, err
 		}
 		return properties.NewArrayProperty(mongoProperty.Name, mongoProperty.RangeSize, element)
+	case properties.Enum:
+		return properties.NewEnumProperty(mongoProperty.Name, mongoProperty.Enums)
 	}
 	return nil, nil
 }
@@ -114,6 +116,9 @@ func fromDomainProperty(property properties.Property) MongoSchemaProperty {
 		element := fromDomainProperty(property.(*properties.ArrayProperty).Element)
 		mongoProperty.Element = &element
 		mongoProperty.RangeSize = property.(*properties.ArrayProperty).RangeSize
+		break
+	case properties.Enum:
+		mongoProperty.Enums = property.(*properties.EnumProperty).Enums
 		break
 	}
 	return mongoProperty

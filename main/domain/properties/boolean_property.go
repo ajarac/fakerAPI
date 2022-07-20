@@ -1,8 +1,8 @@
 package properties
 
 type BooleanProperty struct {
-	AbstractProperty `bson:"metadata"`
-	Rate             float32 `bson:"rate"`
+	AbstractProperty
+	Rate float32
 }
 
 func NewBooleanProperty(name string, rate float32) (*BooleanProperty, error) {

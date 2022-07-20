@@ -20,5 +20,6 @@ type JsonProperty struct {
 	To         time.Time       `json:"to,omitempty"`
 	Element    *JsonProperty   `json:"element,omitempty"`
 	RangeSize  [2]int          `json:"rangeSize,omitempty"`
-	Properties []JsonProperty  `json:"properties,omitempty" json:"properties"`
+	Properties []JsonProperty  `json:"properties,omitempty"`
+	Enums      []string        `json:"enums"`
 }

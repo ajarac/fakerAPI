@@ -3,8 +3,8 @@ package properties
 import "fmt"
 
 type ObjectProperty struct {
-	AbstractProperty `bson:"metadata"`
-	Properties       []Property `bson:"properties"`
+	AbstractProperty
+	Properties []Property
 }
 
 func NewObjectProperty(name string, properties []Property) (*ObjectProperty, error) {
