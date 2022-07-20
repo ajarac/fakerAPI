@@ -11,13 +11,13 @@ type GetListValueUseCase struct {
 	provider out.ValueProvider
 }
 
-func (u *GetListValueUseCase) GetById(ctx context.Context, id string, limit int) ([]*domain.Value, error) {
-	schema, ok, err := u.storage.GetById(ctx, id)
+func (u *GetListValueUseCase) GetById(ctx context.Context, idOrName string, limit int) ([]*domain.Value, error) {
+	schema, ok, err := u.storage.GetByIdOrByName(ctx, idOrName)
 	if err != nil {
 		return nil, err
 	}
 	if !ok {
-		return nil, domain.NewSchemaNotFoundByName(id)
+		return nil, domain.NewSchemaNotFoundByIdOrByName(idOrName)
 	}
 	if limit > 100 {
 		limit = 100

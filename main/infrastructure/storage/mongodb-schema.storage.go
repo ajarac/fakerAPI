@@ -36,13 +36,19 @@ func (m *MongoDBSchemaStorage) GetByName(context context.Context, name string) (
 	return m.getOneSchemaByFilter(context, filter)
 }
 
-func (m *MongoDBSchemaStorage) GetById(context context.Context, id string) (*domain.Schema, bool, error) {
+func (m *MongoDBSchemaStorage) GetByIdOrByName(context context.Context, idOrName string) (*domain.Schema, bool, error) {
 	user := getUserByContext(context)
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, false, err
+	var filter bson.D
+	if primitive.IsValidObjectID(idOrName) {
+		objectId, err := primitive.ObjectIDFromHex(idOrName)
+		if err != nil {
+			return nil, false, err
+		}
+		filter = bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user_id", user}}}}}
+	} else {
+		filter = bson.D{{Key: "$and", Value: bson.A{bson.D{{"name", idOrName}}, bson.D{{"user_id", user}}}}}
 	}
-	filter := bson.D{{Key: "$and", Value: bson.A{bson.D{{"_id", objectId}}, bson.D{{"user_id", user}}}}}
+
 	return m.getOneSchemaByFilter(context, filter)
 }
 

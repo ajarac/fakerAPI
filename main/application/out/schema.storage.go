@@ -11,7 +11,7 @@ type SchemaStorage interface {
 
 	GetNextId() string
 
-	GetById(context context.Context, id string) (*domain.Schema, bool, error)
+	GetByIdOrByName(context context.Context, idOrName string) (*domain.Schema, bool, error)
 
 	GetByName(context context.Context, name string) (*domain.Schema, bool, error)
 

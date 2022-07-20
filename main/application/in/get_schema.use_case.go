@@ -11,7 +11,7 @@ type GetSchemaUseCase struct {
 }
 
 func (u *GetSchemaUseCase) GetById(ctx context.Context, id string) (*domain.Schema, bool, error) {
-	return u.storage.GetById(ctx, id)
+	return u.storage.GetByIdOrByName(ctx, id)
 }
 
 func NewGetSchemaUseCase(storage out.SchemaStorage) *GetSchemaUseCase {
