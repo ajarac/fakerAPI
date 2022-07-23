@@ -6,5 +6,7 @@ import (
 )
 
 func numberGenerator(property *properties.NumberProperty) any {
-	return rand.Intn(100)
+	max := property.Max
+	min := property.Min
+	return rand.Intn(max-min+1) + min
 }

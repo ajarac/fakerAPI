@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 	r := gin.Default()
 	env := config.GetEnvironment()
 

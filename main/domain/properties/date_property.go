@@ -22,7 +22,7 @@ func NewDateProperty(name string, from time.Time, to time.Time) (*DateProperty, 
 }
 
 func validateDate(name string, from time.Time, to time.Time) error {
-	if from.Before(to) {
+	if from.After(to) {
 		return NewPropertyNotValid(name, "from date should be after than to date")
 	}
 	return nil
