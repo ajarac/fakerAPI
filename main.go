@@ -4,6 +4,7 @@ import (
 	"fakerAPI/main/config"
 	"fakerAPI/main/infrastructure"
 	"fmt"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"log"
 	"math/rand"
@@ -14,6 +15,7 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	r := gin.Default()
+	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	env := config.GetEnvironment()
 
 	r.Use(func(context *gin.Context) {
