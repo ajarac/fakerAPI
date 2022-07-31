@@ -3,8 +3,17 @@ package properties
 import "fmt"
 
 type ObjectProperty struct {
-	AbstractProperty
-	Properties []Property
+	Name       string     `json:"name"`
+	Type       Type       `json:"type"`
+	Properties []Property `json:"properties"`
+}
+
+func (o *ObjectProperty) GetType() Type {
+	return o.Type
+}
+
+func (o *ObjectProperty) GetName() string {
+	return o.Name
 }
 
 func NewObjectProperty(name string, properties []Property) (*ObjectProperty, error) {
@@ -12,10 +21,7 @@ func NewObjectProperty(name string, properties []Property) (*ObjectProperty, err
 	if err != nil {
 		return nil, err
 	}
-	return &ObjectProperty{
-		AbstractProperty: newAbstractProperty(name, Object),
-		Properties:       properties,
-	}, nil
+	return &ObjectProperty{Name: name, Type: Object, Properties: properties}, nil
 }
 
 func validateObject(objName string, props []Property) error {

@@ -1,9 +1,18 @@
 package properties
 
 type NumberProperty struct {
-	AbstractProperty
-	Min int
-	Max int
+	Name string `json:"name"`
+	Type Type   `json:"type"`
+	Min  int    `json:"min"`
+	Max  int    `json:"max"`
+}
+
+func (n *NumberProperty) GetType() Type {
+	return n.Type
+}
+
+func (n *NumberProperty) GetName() string {
+	return n.Name
 }
 
 func NewNumberProperty(name string, min int, max int) (*NumberProperty, error) {
@@ -11,11 +20,7 @@ func NewNumberProperty(name string, min int, max int) (*NumberProperty, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &NumberProperty{
-		AbstractProperty: newAbstractProperty(name, Number),
-		Min:              min,
-		Max:              max,
-	}, nil
+	return &NumberProperty{Name: name, Type: Number, Min: min, Max: max}, nil
 }
 
 func validateNumber(name string, min int, max int) error {

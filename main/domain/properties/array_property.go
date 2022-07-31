@@ -1,9 +1,18 @@
 package properties
 
 type ArrayProperty struct {
-	AbstractProperty
-	RangeSize [2]int
-	Element   Property
+	Name      string   `json:"name"`
+	Type      Type     `json:"type"`
+	RangeSize [2]int   `json:"rangeSize"`
+	Element   Property `json:"element"`
+}
+
+func (a *ArrayProperty) GetType() Type {
+	return a.Type
+}
+
+func (a *ArrayProperty) GetName() string {
+	return a.Name
 }
 
 func NewArrayProperty(name string, rangeSize [2]int, element Property) (*ArrayProperty, error) {
@@ -11,11 +20,7 @@ func NewArrayProperty(name string, rangeSize [2]int, element Property) (*ArrayPr
 	if err != nil {
 		return nil, err
 	}
-	return &ArrayProperty{
-		AbstractProperty: newAbstractProperty(name, Array),
-		RangeSize:        rangeSize,
-		Element:          element,
-	}, nil
+	return &ArrayProperty{Name: name, Type: Array, RangeSize: rangeSize, Element: element}, nil
 }
 
 func validateArray(name string, rangeSize [2]int) error {

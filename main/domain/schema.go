@@ -6,9 +6,9 @@ import (
 )
 
 type Schema struct {
-	Id         string
-	Name       string
-	Properties []properties.Property
+	Id         string                `json:"id"`
+	Name       string                `json:"name"`
+	Properties []properties.Property `json:"properties"`
 }
 
 func NewSchema(id string, name string, properties []properties.Property) (*Schema, error) {

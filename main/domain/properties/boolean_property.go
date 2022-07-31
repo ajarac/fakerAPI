@@ -1,8 +1,17 @@
 package properties
 
 type BooleanProperty struct {
-	AbstractProperty
-	Rate float32
+	Name string  `json:"name"`
+	Type Type    `json:"type"`
+	Rate float32 `json:"rate"`
+}
+
+func (b *BooleanProperty) GetType() Type {
+	return b.Type
+}
+
+func (b *BooleanProperty) GetName() string {
+	return b.Name
 }
 
 func NewBooleanProperty(name string, rate float32) (*BooleanProperty, error) {
@@ -10,10 +19,7 @@ func NewBooleanProperty(name string, rate float32) (*BooleanProperty, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &BooleanProperty{
-		AbstractProperty: newAbstractProperty(name, Boolean),
-		Rate:             rate,
-	}, nil
+	return &BooleanProperty{Name: name, Type: Boolean, Rate: rate}, nil
 }
 
 func validateBoolean(name string, rate float32) error {

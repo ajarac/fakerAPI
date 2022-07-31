@@ -1,13 +1,19 @@
 package properties
 
 type EnumProperty struct {
-	AbstractProperty
-	Enums []string
+	Name  string   `json:"name"`
+	Type  Type     `json:"type"`
+	Enums []string `json:"enums"`
+}
+
+func (e *EnumProperty) GetType() Type {
+	return e.Type
+}
+
+func (e *EnumProperty) GetName() string {
+	return e.Name
 }
 
 func NewEnumProperty(name string, enums []string) (*EnumProperty, error) {
-	return &EnumProperty{
-		AbstractProperty: newAbstractProperty(name, Enum),
-		Enums:            enums,
-	}, nil
+	return &EnumProperty{Name: name, Type: Enum, Enums: enums}, nil
 }
