@@ -2,14 +2,12 @@ package faker
 
 import (
 	"fakerAPI/main/domain/properties"
-	"math/rand"
+	"github.com/brianvoe/gofakeit/v6"
 	"time"
 )
 
-func dateGenerator(property *properties.DateProperty) time.Time {
-	min := property.From.Unix()
-	max := property.To.Unix()
-	delta := max - min
-	sec := rand.Int63n(delta) + min
-	return time.Unix(sec, 0)
+func dateGenerator(property *properties.DateProperty, faker *gofakeit.Faker) time.Time {
+	min := property.From
+	max := property.To
+	return faker.DateRange(min, max)
 }

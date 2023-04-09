@@ -2,9 +2,9 @@ package faker
 
 import (
 	"fakerAPI/main/domain/properties"
-	"math/rand"
+	"github.com/brianvoe/gofakeit/v6"
 )
 
-func boolGenerator(property *properties.BooleanProperty) any {
-	return rand.Float32() < property.Rate
+func boolGenerator(property *properties.BooleanProperty, faker *gofakeit.Faker) any {
+	return faker.Number(0, 100) < property.Rate
 }

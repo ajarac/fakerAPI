@@ -15,7 +15,7 @@ func (u *ProveSchemaUseCase) Prove(properties []properties.Property) (*domain.Va
 	if err != nil {
 		return nil, err
 	}
-	return u.provider.Generate(schema), nil
+	return u.provider.Generate(schema, "0"), nil
 }
 
 func NewProveSchemaUseCase(provider out.ValueProvider) *ProveSchemaUseCase {

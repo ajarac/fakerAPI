@@ -1,9 +1,9 @@
 package properties
 
 type BooleanProperty struct {
-	Name string  `json:"name"`
-	Type Type    `json:"type"`
-	Rate float32 `json:"rate"`
+	Name string `json:"name"`
+	Type Type   `json:"type"`
+	Rate int    `json:"rate"`
 }
 
 func (b *BooleanProperty) GetType() Type {
@@ -14,7 +14,7 @@ func (b *BooleanProperty) GetName() string {
 	return b.Name
 }
 
-func NewBooleanProperty(name string, rate float32) (*BooleanProperty, error) {
+func NewBooleanProperty(name string, rate int) (*BooleanProperty, error) {
 	err := validateBoolean(name, rate)
 	if err != nil {
 		return nil, err
@@ -22,9 +22,9 @@ func NewBooleanProperty(name string, rate float32) (*BooleanProperty, error) {
 	return &BooleanProperty{Name: name, Type: Boolean, Rate: rate}, nil
 }
 
-func validateBoolean(name string, rate float32) error {
-	if 0 > rate || rate > 1 {
-		return NewPropertyNotValid(name, "Rate should be between 0 and 1")
+func validateBoolean(name string, rate int) error {
+	if 0 > rate || rate > 100 {
+		return NewPropertyNotValid(name, "Rate should be between 0 and 100")
 	}
 	return nil
 }

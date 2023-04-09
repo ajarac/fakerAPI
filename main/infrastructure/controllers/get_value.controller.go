@@ -14,7 +14,8 @@ type GetValueController struct {
 
 func (c *GetValueController) ById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	value, err := c.useCase.GetById(ctx, id)
+	valueId := ctx.Param("index")
+	value, err := c.useCase.GetById(ctx, id, valueId)
 	var schemaNotFound *domain.SchemaNotFound
 	if errors.As(err, &schemaNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

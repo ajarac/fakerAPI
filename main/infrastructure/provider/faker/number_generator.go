@@ -2,11 +2,11 @@ package faker
 
 import (
 	"fakerAPI/main/domain/properties"
-	"math/rand"
+	"github.com/brianvoe/gofakeit/v6"
 )
 
-func numberGenerator(property *properties.NumberProperty) any {
+func numberGenerator(property *properties.NumberProperty, faker *gofakeit.Faker) any {
 	max := property.Max
 	min := property.Min
-	return rand.Intn(max-min+1) + min
+	return faker.Number(min, max)
 }

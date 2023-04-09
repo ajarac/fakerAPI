@@ -19,6 +19,6 @@ func BuildControllersV1(group *gin.RouterGroup, useCases *UseCases) {
 	group.GET("/schemas", getSchemasControllers.GetAll)
 	group.DELETE("/schemas/:id", deleteSchemaController.Delete)
 	group.GET("/schemas/:id", getSchemaController.GetById)
-	group.GET("/values/:id", getValueController.ById)
+	group.GET("/values/:id/:index", getValueController.ById)
 	group.GET("/values/:id/list", getListValuesController.ById)
 }

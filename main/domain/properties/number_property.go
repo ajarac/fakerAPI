@@ -16,6 +16,9 @@ func (n *NumberProperty) GetName() string {
 }
 
 func NewNumberProperty(name string, min int, max int) (*NumberProperty, error) {
+	if min == max && min == 0 {
+		max = 100
+	}
 	err := validateNumber(name, min, max)
 	if err != nil {
 		return nil, err

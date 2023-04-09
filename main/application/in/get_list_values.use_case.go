@@ -4,6 +4,7 @@ import (
 	"context"
 	"fakerAPI/main/application/out"
 	"fakerAPI/main/domain"
+	"strconv"
 )
 
 type GetListValueUseCase struct {
@@ -24,7 +25,7 @@ func (u *GetListValueUseCase) GetById(ctx context.Context, idOrName string, limi
 	}
 	var list = make([]*domain.Value, limit)
 	for i := 0; i < limit; i++ {
-		list[i] = u.provider.Generate(schema)
+		list[i] = u.provider.Generate(schema, strconv.Itoa(i))
 	}
 	return list, nil
 }

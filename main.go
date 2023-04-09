@@ -7,13 +7,10 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
 	r := gin.Default()
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	env := config.GetEnvironment()

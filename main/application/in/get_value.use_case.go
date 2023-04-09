@@ -11,7 +11,7 @@ type GetValueUseCase struct {
 	provider out.ValueProvider
 }
 
-func (u *GetValueUseCase) GetById(ctx context.Context, id string) (*domain.Value, error) {
+func (u *GetValueUseCase) GetById(ctx context.Context, id string, valueId string) (*domain.Value, error) {
 	schema, ok, err := u.storage.GetByIdOrByName(ctx, id)
 	if err != nil {
 		return nil, err
@@ -19,7 +19,7 @@ func (u *GetValueUseCase) GetById(ctx context.Context, id string) (*domain.Value
 	if !ok {
 		return nil, domain.NewSchemaNotFoundByIdOrByName(id)
 	}
-	return u.provider.Generate(schema), nil
+	return u.provider.Generate(schema, valueId), nil
 }
 
 func NewGetValueUseCase(storage out.SchemaStorage, provider out.ValueProvider) *GetValueUseCase {

@@ -17,7 +17,7 @@ type MongoSchemaProperty struct {
 	Type       properties.Type       `bson:"type"`
 	Min        int                   `bson:"min,omitempty"`
 	Max        int                   `bson:"max,omitempty"`
-	Rate       float32               `bson:"rate,omitempty"`
+	Rate       int                   `bson:"rate,omitempty"`
 	From       time.Time             `bson:"from,omitempty"`
 	To         time.Time             `bson:"to,omitempty"`
 	Element    *MongoSchemaProperty  `bson:"element,omitempty"`
