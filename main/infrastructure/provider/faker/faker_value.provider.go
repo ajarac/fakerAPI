@@ -15,7 +15,6 @@ func (provider *ValueProvider) Generate(schema *domain.Schema, valueId string) *
 	value := make(domain.Value)
 	key := fmt.Sprint(schema.Id, "-", valueId)
 	seed := FNV64a(key)
-	fmt.Println(seed)
 	faker := gofakeit.New(seed)
 	for _, prop := range schema.Properties {
 		value[prop.GetName()] = provider.generateProperty(prop, faker)
